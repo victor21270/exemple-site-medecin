@@ -1,0 +1,426 @@
+/* Gabarit « médecin v2 » de L'Information Studio (22/11/2026) : la base commune aux trois habillages.
+   La structure, les règles de l'Ordre et la vitesse sont ici ; l'habit (polices, couleurs, angles, traits) est dans
+   habillages/<nom>.css, ajouté à la suite par le générateur dans un seul fichier.
+   Efficace d'abord : texte en 18 px (patients souvent âgés, sur téléphone), le premier écran dit qui, quoi, où, combien,
+   et le rendez-vous. Léger avant tout : aucun effet, aucune animation, aucun script. Le style vient de la typographie,
+   de l'air et des photos, jamais d'une animation qui cache du texte. */
+
+:root {
+  color-scheme: light;
+  --fond: #FBF9F5;
+  --papier: #F6EFE2;          /* le fond des illustrations */
+  --blanc: #FFFFFF;
+  --encre: #14233B;
+  --texte: #2A3446;
+  --doux: #5A6476;
+  --ligne: #E5DFD4;
+  --trait: var(--ligne);      /* les traits qui séparent les lignes d'une liste */
+  --sombre: var(--encre);     /* le fond des bandes foncées */
+  --accent: #2F6F6A;          /* remplacé par la couleur de l'habillage, ou par celle de la fiche */
+  --accent-fonce: #1F4F4B;
+  --accent-clair: #E4EFEC;
+  --rayon: 14px;              /* angles des cartes et des photos */
+  --rayon-btn: 999px;         /* angles des boutons */
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --titre: var(--serif);      /* police des titres */
+  --titre-poids: 600;
+  --titre-espace: -0.01em;
+  --label: var(--sans);       /* police des petits libellés (surtitres, « Adresse », « Carrousel ») */
+  --label-espace: .08em;
+  --large: 1120px;
+  --texte-large: 700px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: var(--sans);
+  font-size: 1.125rem;        /* 18 px */
+  line-height: 1.6;
+  font-synthesis: none;       /* jamais de faux gras ni de faux italique */
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent-fonce); text-underline-offset: 3px; }
+a:hover { color: var(--encre); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--titre); color: var(--encre); font-weight: var(--titre-poids); line-height: 1.15; letter-spacing: var(--titre-espace); margin: 0 0 .5em; }
+h1, h2 { text-wrap: balance; }   /* pas de mot seul sur la dernière ligne d'un titre */
+h1 { font-size: clamp(2.2rem, 6.5vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 1em; }
+ul, ol { padding-left: 1.25em; margin: 0 0 1em; }
+li { margin-bottom: .35em; }
+.conteneur { width: 100%; max-width: var(--large); margin: 0 auto; padding: 0 16px; }
+.section { padding: 64px 0; }
+.section + .section { padding-top: 0; }
+@media (min-width: 860px) { .section { padding: 88px 0; } }
+.section-titre { max-width: var(--texte-large); margin-bottom: 32px; }
+.section-titre p { color: var(--doux); margin: 0; }
+.surtitre { font-family: var(--label); font-size: .8rem; font-weight: 600; letter-spacing: var(--label-espace); text-transform: uppercase; color: var(--accent); margin: 0 0 .7em; }
+.doux { color: var(--doux); }
+.petit { font-size: .9rem; }
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Bandeau du site témoin, avec le choix de l'habillage */
+.bandeau-temoin { background: #14171C; color: #fff; font-size: .82rem; text-align: center; padding: 8px 16px; line-height: 1.5; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+.bandeau-temoin a { color: #fff; }
+.bandeau-court { display: none; }
+@media (max-width: 700px) { .bandeau-long { display: none; } .bandeau-court { display: inline; } }
+.habillages { display: block; margin-top: 4px; color: #C9CED6; }
+.habillages a, .habillages strong { display: inline-block; padding: 2px 10px; border-radius: 999px; margin: 2px 1px; }
+.habillages a { color: #fff; border: 1px solid rgba(255,255,255,.35); text-decoration: none; }
+.habillages a:hover { background: rgba(255,255,255,.12); color: #fff; }
+.habillages strong { background: #fff; color: #14171C; font-weight: 600; }
+
+/* En-tête */
+.entete { background: var(--blanc); border-bottom: 1px solid var(--ligne); }
+.entete .conteneur { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding-top: 14px; padding-bottom: 14px; }
+.marque { text-decoration: none; color: var(--encre); margin-right: auto; line-height: 1.25; }
+.marque strong { display: block; font-family: var(--titre); font-size: 1.3rem; font-weight: var(--titre-poids); letter-spacing: var(--titre-espace); }
+.marque span { font-size: .85rem; color: var(--doux); }
+.nav { display: flex; gap: 4px 18px; flex-wrap: wrap; font-size: .93rem; order: 3; width: 100%; }
+.entete .btn { flex: none; display: none; }
+@media (min-width: 860px) { .entete .btn { display: inline-flex; } }
+.nav a { text-decoration: none; color: var(--texte); padding: 4px 0; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--accent-fonce); text-decoration: underline; }
+@media (min-width: 1100px) { .nav { order: 0; width: auto; } }
+
+/* Boutons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 22px; border-radius: var(--rayon-btn); background: var(--accent); color: #fff; font-weight: 600; font-size: 1rem; text-decoration: none; border: 2px solid var(--accent); }
+.btn:hover { background: var(--accent-fonce); border-color: var(--accent-fonce); color: #fff; }
+.btn-clair { background: transparent; color: var(--accent-fonce); }
+.btn-clair:hover { background: var(--accent-clair); color: var(--encre); }
+.btn-petit { min-height: 40px; padding: 8px 16px; font-size: .92rem; }
+.boutons { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0; }
+
+/* Bloc de rendez-vous : toujours avec le secteur et les honoraires à côté (recommandations du CNOM, 2021) */
+.rdv { margin-top: 28px; }
+.rdv-infos { margin: 12px 0 0; font-size: .88rem; color: var(--doux); line-height: 1.5; }
+.rdv-infos strong { color: var(--texte); font-weight: 600; }
+
+/* Accueil : la une */
+.une { background: var(--blanc); border-bottom: 1px solid var(--ligne); }
+.une .conteneur { display: grid; gap: 32px; padding-top: 40px; padding-bottom: 48px; align-items: center; }
+.une h1 { font-size: clamp(2.5rem, 7.5vw, 4.2rem); line-height: 1.05; }
+.une-texte p.intro { font-size: 1.2rem; color: var(--texte); max-width: 34em; }
+.une-photo img { border-radius: var(--rayon); width: 100%; max-width: 440px; margin: 0 auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.reperes { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 8px; font-size: .95rem; }
+.reperes li { margin: 0; padding-left: 26px; position: relative; }
+.reperes li::before { content: ""; position: absolute; left: 4px; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+@media (min-width: 860px) {
+  .une .conteneur { grid-template-columns: 1.15fr .85fr; gap: 64px; padding-top: 72px; padding-bottom: 88px; }
+}
+
+/* Accueil v2 : le grand visuel de la spécialité, en paysage. Le visuel a un fond uni à gauche : le texte s'y pose
+   directement, sans voile ni dégradé, et le menu aussi (sur ordinateur). Sur téléphone : le visuel, puis le texte. */
+.une.une-visuel { background: var(--fond-une, var(--blanc)); border-bottom: 0; position: relative; overflow: hidden; }
+.accueil-visuel .entete { background: var(--fond-une, var(--blanc)); border-bottom-color: transparent; }
+.une-visuel .conteneur { display: block; padding-top: 28px; padding-bottom: 44px; }
+.une-visuel-img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 86% 50%; }
+.une-visuel .une-texte { position: relative; max-width: 600px; }
+.une-visuel .rdv-infos { color: var(--texte); }
+.une-visuel .surtitre { color: var(--accent-fonce); }   /* contraste suffisant sur le fond du visuel */
+@media (min-width: 860px) {
+  .accueil-visuel .entete { position: absolute; left: 0; right: 0; z-index: 3; background: transparent; border-bottom-color: transparent; }
+  .une.une-visuel { min-height: clamp(620px, 84vh, 860px); display: flex; align-items: center; }
+  .une-visuel-img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; object-position: 78% 50%; }
+  .une-visuel .conteneur { padding-top: 150px; padding-bottom: 96px; }
+  .une-visuel .une-texte { max-width: 560px; }
+}
+@media (min-width: 1400px) { .une-visuel .une-texte { max-width: 600px; } }
+
+/* Le médecin, juste sous le visuel */
+.presentation-grille { display: grid; gap: 36px; align-items: center; }
+@media (min-width: 960px) { .presentation-grille { grid-template-columns: .9fr 1.1fr; gap: 72px; } }
+.presentation-photo { margin: 0; }
+.presentation-photo img { width: 100%; max-width: 520px; aspect-ratio: 4 / 5; object-fit: cover; object-position: 100% 25%; border-radius: var(--rayon); }   /* cadre calé à droite : la médecin au centre */
+.presentation-texte p { max-width: 34em; }
+.lien-suite { font-weight: 600; margin: 0; }
+.lien-suite a { text-decoration-thickness: 1px; }
+
+/* Une bande foncée pour rythmer la page (le parcours du patient) : les couleurs s'inversent à l'intérieur */
+.section.bande-sombre { background: var(--sombre); padding: 72px 0;
+  --encre: #FFFFFF; --texte: rgba(255,255,255,.86); --doux: rgba(255,255,255,.74); --ligne: rgba(255,255,255,.16);
+  --trait: rgba(255,255,255,.4); --blanc: rgba(255,255,255,.05); --accent: #FFFFFF; --accent-fonce: #FFFFFF; --accent-clair: rgba(255,255,255,.14); color: var(--texte); }
+.bande-sombre + .section { padding-top: 72px; }
+@media (min-width: 860px) { .section.bande-sombre { padding: 96px 0; } .bande-sombre + .section { padding-top: 96px; } }
+
+/* Le dernier appel : le rendez-vous, sur le fond du visuel du haut */
+.appel { background: var(--fond-une, var(--blanc)); text-align: center; padding: 72px 0; }
+.accueil-visuel .pied { margin-top: 0; }
+.appel h2 { font-size: clamp(1.9rem, 5vw, 3rem); max-width: 18em; margin-left: auto; margin-right: auto; }
+.appel .intro { color: var(--texte); }
+.appel .boutons { justify-content: center; }
+.appel .rdv-infos { max-width: 36em; margin-left: auto; margin-right: auto; color: var(--texte); }
+.appel + .pied { margin-top: 0; }
+@media (min-width: 860px) { .appel { padding: 104px 0; } }
+
+/* Accueil minimaliste : une phrase par bloc, le détail sur les pages intérieures */
+.rdv-compact .rdv-infos { font-size: .8rem; line-height: 1.55; max-width: 40em; }
+.carte-mini .carte-corps { padding-bottom: 4px; }
+.carte-mini h3 { margin: 0; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.carte-mini h3 span[aria-hidden] { font-family: var(--sans); font-size: 1rem; color: var(--doux); }
+.parcours-mini p { max-width: 22em; }
+@media (max-width: 599px) { .accueil-visuel .cartes { grid-template-columns: 1fr 1fr; gap: 24px 14px; } .carte-mini h3 { font-size: 1rem; } }
+.questions.questions-mini a { min-height: 0; }
+.post.post-mini { padding: 0; }
+.accueil-visuel .posts { max-width: none; }
+.post-mini .post-image { margin: 0; border-radius: 0; aspect-ratio: 4 / 3; }
+.post-mini .post-format { padding: 18px 20px 0; }
+.post-mini .post-titre { padding: 0 20px 20px; margin-top: 8px; margin-bottom: 0; }
+.post-mini::before { z-index: 1; }
+.lieux-court { display: grid; gap: 32px; align-items: center; }
+@media (min-width: 900px) { .lieux-court { grid-template-columns: 1.25fr 1fr; gap: 64px; } }
+.lieux-photo { margin: 0; }
+.lieux-photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--rayon); }
+.lieux-liste { list-style: none; padding: 0; margin: 0 0 24px; }
+.lieux-liste li { margin: 0; padding: 18px 0; border-top: 1px solid var(--ligne); }
+.lieux-liste li:last-child { border-bottom: 1px solid var(--ligne); }
+.lieux-liste h3 { margin-bottom: .25em; }
+.lieux-liste p { margin: 0; font-size: .95rem; }
+.etapes-detail { padding-left: 1.3em; }
+.etapes-detail li { margin-bottom: 1em; }
+.etapes-detail h3 { margin-bottom: .2em; }
+.etapes-detail li::marker { font-weight: 600; color: var(--accent); }
+
+/* Petits retours au survol, jamais au défilement */
+.btn, .carte, .questions a, .post { transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.carte img, .post-image { transition: transform .6s ease; }
+.carte:hover img, .post:hover .post-image { transform: scale(1.035); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+/* Cartes des actes */
+.cartes { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 600px) { .cartes { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .cartes { grid-template-columns: repeat(4, 1fr); } }
+.carte { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: var(--texte); }
+.carte:hover { border-color: var(--accent); }
+.carte img { background: var(--papier); aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+.carte-corps { padding: 18px 18px 20px; display: flex; flex-direction: column; flex: 1; }
+.carte-corps h3 { margin-bottom: .35em; }
+.carte-corps p { font-size: .95rem; color: var(--doux); margin-bottom: 12px; }
+.carte-lien { margin-top: auto; font-weight: 600; font-size: .95rem; color: var(--accent-fonce); }
+
+/* Le parcours du patient */
+.parcours { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; counter-reset: etape; }
+@media (min-width: 800px) { .parcours { grid-template-columns: repeat(4, 1fr); } }
+.parcours li { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 20px; margin: 0; counter-increment: etape; }
+.parcours li::before { content: counter(etape); display: inline-flex; width: 34px; height: 34px; border-radius: 50%; align-items: center; justify-content: center; background: var(--accent-clair); color: var(--accent-fonce); font-weight: 600; margin-bottom: 10px; }
+.parcours h3 { margin-bottom: .3em; }
+.parcours p { font-size: .95rem; color: var(--doux); margin: 0; }
+
+/* Questions fréquentes (liens vers les pages réponses) */
+.questions { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+@media (min-width: 800px) { .questions { grid-template-columns: 1fr 1fr; } }
+.questions li { margin: 0; display: flex; }
+.questions a { flex: 1; display: flex; justify-content: space-between; gap: 16px; align-items: center; background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 16px 20px; text-decoration: none; color: var(--encre); font-weight: 500; min-height: 64px; }
+.questions a:hover { border-color: var(--accent); }
+.questions a span[aria-hidden] { color: var(--accent); }
+.questions small { display: block; color: var(--doux); font-weight: 400; font-size: .85rem; margin-top: 2px; }
+
+/* Ses derniers posts : couvertures de carrousels, en CSS */
+.posts { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 980px; }
+@media (min-width: 560px) { .posts { grid-template-columns: repeat(3, 1fr); } }
+.post { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 22px; display: flex; flex-direction: column; text-decoration: none; color: var(--encre); position: relative; overflow: hidden; }
+.post:hover { border-color: var(--accent); }
+.post::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 6px; background: var(--accent); }
+.post-format { font-family: var(--label); font-size: .75rem; font-weight: 600; letter-spacing: var(--label-espace); text-transform: uppercase; color: var(--accent); }
+.post-titre { font-family: var(--titre); font-size: 1.4rem; font-weight: var(--titre-poids); letter-spacing: var(--titre-espace); line-height: 1.2; margin: 12px 0 14px; }
+.post-image { margin-top: auto; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: calc(var(--rayon) * .7); background: var(--papier); }
+.post-signature { font-size: .8rem; color: var(--doux); border-top: 1px solid var(--ligne); padding-top: 10px; margin-top: 16px; }
+.post-lien { font-size: .85rem; font-weight: 600; color: var(--accent-fonce); margin-top: 6px; }
+
+/* Lieux de consultation */
+.lieux { display: grid; gap: 16px; }
+@media (min-width: 800px) { .lieux { grid-template-columns: 1fr 1fr; } }
+.lieu { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 24px; }
+.lieu h3 { margin-bottom: .2em; }
+.lieu dl { margin: 14px 0 0; display: grid; gap: 10px; }
+.lieu dt { font-family: var(--label); font-size: .8rem; font-weight: 600; letter-spacing: var(--label-espace); text-transform: uppercase; color: var(--doux); }
+.lieu dd { margin: 0; }
+
+/* Photo large (le cabinet) */
+.photo-large img { border-radius: var(--rayon); width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+
+/* Pages intérieures */
+.fil { font-size: .88rem; color: var(--doux); padding: 18px 0 0; }
+.fil ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.fil li { margin: 0; }
+.fil li + li::before { content: "›"; margin-right: 6px; color: var(--doux); }
+.fil a { color: var(--doux); }
+.page-entete { background: var(--blanc); border-bottom: 1px solid var(--ligne); }
+.page-entete .conteneur { display: grid; gap: 24px; padding-top: 4px; padding-bottom: 44px; align-items: center; }
+.page-entete h1 { margin-top: 20px; }
+.page-entete .intro { font-size: 1.15rem; max-width: 36em; margin-bottom: 0; }
+.page-entete figure { margin: 0; }
+.page-entete figure img { background: var(--papier); border-radius: var(--rayon); width: 100%; max-width: 360px; margin: 0 auto; aspect-ratio: 1; object-fit: cover; }
+@media (min-width: 860px) {
+  .page-entete.avec-image .conteneur { grid-template-columns: 1.3fr .7fr; gap: 56px; padding-top: 28px; padding-bottom: 56px; }
+}
+.colonnes { display: grid; gap: 40px; padding: 56px 16px 72px; }
+@media (min-width: 960px) { .colonnes { grid-template-columns: minmax(0, 1fr) 320px; gap: 72px; } }
+.prose { max-width: var(--texte-large); }
+.prose h2 { margin-top: 1.7em; font-size: 1.7rem; }
+.prose h2:first-child { margin-top: 0; }
+.prose li::marker { color: var(--accent); }
+
+/* « En bref » */
+.en-bref { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 22px 24px; margin: 0 0 32px; }
+.en-bref h2 { font-size: 1.25rem; margin: 0 0 12px; }
+.en-bref dl { margin: 0; display: grid; gap: 12px; }
+@media (min-width: 600px) { .en-bref dl { grid-template-columns: 200px 1fr; gap: 10px 20px; } }
+.en-bref dt { font-weight: 600; color: var(--encre); font-size: .95rem; }
+.en-bref dd { margin: 0; font-size: .95rem; }
+
+/* Les risques : toujours écrits */
+.encadre { border-left: 4px solid var(--accent); background: var(--accent-clair); border-radius: 0 var(--rayon) var(--rayon) 0; padding: 18px 22px; margin: 0 0 1.5em; }
+.encadre h2, .encadre h3 { margin-top: 0; font-size: 1.3rem; }
+.encadre > :last-child { margin-bottom: 0; }
+
+/* La réponse courte (pages réponses) */
+.reponse-courte { background: var(--blanc); border: 2px solid var(--accent); border-radius: var(--rayon); padding: 22px 24px; margin: 0 0 32px; }
+.reponse-courte p { font-size: 1.2rem; color: var(--encre); margin: 0; }
+.reponse-courte .surtitre { margin-bottom: 8px; font-size: .8rem; color: var(--accent); }
+
+/* Signature, date, sources */
+.signature { display: flex; gap: 14px; align-items: center; border-top: 1px solid var(--ligne); border-bottom: 1px solid var(--ligne); padding: 16px 0; margin: 32px 0; font-size: .92rem; color: var(--doux); }
+.signature img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+.signature strong { color: var(--encre); font-weight: 600; }
+.sources { font-size: .88rem; color: var(--doux); }
+.sources h2 { font-size: 1.15rem; margin-top: 0; }
+.sources ol { padding-left: 1.2em; }
+.sources a { word-break: break-word; }
+.avertissement { font-size: .88rem; color: var(--doux); background: var(--blanc); border: 1px dashed var(--ligne); border-radius: var(--rayon); padding: 14px 18px; }
+
+/* Colonne de côté */
+.cote { display: grid; gap: 20px; align-content: start; align-self: start; }
+.cote .boutons { flex-direction: column; }
+.cote .boutons .btn { width: 100%; }
+.cote-bloc { background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 22px; }
+.cote-bloc h2 { font-size: 1.2rem; margin-bottom: 10px; }
+.cote-bloc .rdv { margin-top: 0; }
+.cote-bloc ul { list-style: none; padding: 0; margin: 0; }
+.cote-bloc li { margin: 0; border-top: 1px solid var(--ligne); }
+.cote-bloc li:first-child { border-top: 0; }
+.cote-bloc li a { display: block; padding: 10px 0; text-decoration: none; font-size: .95rem; }
+.cote-bloc li a:hover { text-decoration: underline; }
+@media (min-width: 960px) { .cote { position: sticky; top: 24px; } }
+
+/* Tableaux (honoraires, diplômes) */
+.tableau { width: 100%; border-collapse: collapse; background: var(--blanc); border: 1px solid var(--ligne); border-radius: var(--rayon); overflow: hidden; margin: 0 0 1.5em; font-size: .97rem; }
+.tableau th, .tableau td { text-align: left; padding: 12px 16px; border-top: 1px solid var(--ligne); vertical-align: top; }
+.tableau thead th { border-top: 0; background: var(--accent-clair); color: var(--encre); font-family: var(--label); font-weight: 600; font-size: .9rem; }
+.tableau td.prix { white-space: nowrap; font-weight: 600; color: var(--encre); }
+
+/* Diplômes : l'intitulé, et l'établissement à côté (règle de l'Ordre) */
+.diplomes td:first-child { white-space: nowrap; font-weight: 600; color: var(--encre); }
+
+/* Profil (page du médecin) */
+.profil-photo img { border-radius: var(--rayon); width: 100%; max-width: 320px; aspect-ratio: 4 / 5; object-fit: cover; }
+.frise { list-style: none; padding: 0; margin: 0 0 1.5em; border-left: 2px solid var(--ligne); }
+.frise li { padding: 0 0 16px 20px; position: relative; margin: 0; }
+.frise li::before { content: ""; position: absolute; left: -7px; top: .5em; width: 12px; height: 12px; border-radius: 50%; background: var(--fond); border: 2px solid var(--accent); }
+.frise .annee { font-weight: 600; color: var(--encre); margin-right: 8px; }
+
+/* Pied de page */
+.pied { background: var(--encre); color: #D8DEE8; font-size: .92rem; margin-top: 24px; }
+.pied .conteneur { display: grid; gap: 28px; padding-top: 48px; padding-bottom: 48px; }
+@media (min-width: 800px) { .pied .conteneur { grid-template-columns: 1.4fr 1fr 1fr; } }
+.pied strong { color: #fff; font-family: var(--titre); font-size: 1.2rem; font-weight: var(--titre-poids); letter-spacing: var(--titre-espace); display: block; margin-bottom: 6px; }
+.pied h2 { color: #fff; font-family: var(--label); font-size: .8rem; letter-spacing: var(--label-espace); text-transform: uppercase; font-weight: 600; margin-bottom: 10px; }
+.pied a { color: #fff; }
+.pied ul { list-style: none; padding: 0; margin: 0; }
+.pied li { margin-bottom: 6px; }
+.pied-bas { border-top: 1px solid rgba(255,255,255,.15); }
+.pied-bas .conteneur { display: block; padding-top: 18px; padding-bottom: 18px; font-size: .82rem; color: #AEB7C6; }
+
+/* Barre de rendez-vous fixe, sur téléphone seulement */
+.barre-rdv { position: sticky; bottom: 0; z-index: 5; background: var(--blanc); border-top: 1px solid var(--ligne); padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+.barre-rdv .btn { flex: none; min-height: 44px; padding: 8px 18px; }
+.barre-rdv p { margin: 0; font-size: .78rem; line-height: 1.35; color: var(--doux); }
+@media (min-width: 860px) { .barre-rdv { display: none; } }
+
+
+/* Habillage « Sobre » (22/11/2026), dans l'esprit du site du Dr João Pitta (pitta.ch) : texte et boutons en noir et blanc,
+   une seule police sans empattement (Manrope), traits fins à la place des cartes, angles droits. Les photos restent
+   en couleur (Victor, 22/11 : « dommage de mettre tout en noir et blanc »). Pour le médecin qui veut un site net. */
+
+@font-face { font-family: "Manrope"; font-weight: 400; font-display: swap; src: url("fonts/manrope-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 500; font-display: swap; src: url("fonts/manrope-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: swap; src: url("fonts/manrope-latin-600-normal.woff2") format("woff2"); }
+
+:root {
+  --fond: #FFFFFF;
+  --papier: #F2F2F2;
+  --blanc: #FFFFFF;
+  --encre: #111111;
+  --texte: #2B2B2B;
+  --doux: #636363;
+  --ligne: #E3E3E3;
+  --trait: #111111;
+  --rayon: 2px;
+  --rayon-btn: 2px;
+  --sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --titre: var(--sans);
+  --titre-poids: 500;
+  --titre-espace: -0.03em;
+  --label: var(--sans);
+  --label-espace: .16em;
+}
+
+h3 { font-weight: 600; letter-spacing: -0.015em; }
+.une h1 { font-weight: 500; }
+.surtitre { color: var(--doux); font-weight: 600; font-size: .74rem; }
+
+/* En-tête : menu en petites capitales */
+.nav { gap: 4px 18px; }
+.nav a { font-size: .72rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.entete .btn { font-size: .74rem; letter-spacing: .08em; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--encre); text-decoration: underline; text-underline-offset: 6px; }
+.marque strong { font-weight: 600; letter-spacing: -0.02em; }
+
+/* Boutons : rectangles noirs, en capitales */
+.btn { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+.btn-clair { color: var(--encre); border-color: var(--encre); }
+.btn-clair:hover { background: var(--encre); color: #fff; }
+.reperes li::before { border-radius: 0; width: 7px; height: 7px; top: .6em; background: var(--encre); }
+
+/* Les cartes deviennent des colonnes séparées par un trait */
+.cartes { gap: 32px 24px; }
+.carte { background: transparent; border: 0; border-radius: 0; border-top: 1px solid var(--trait); padding-top: 16px; }
+.carte:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+.carte-corps { padding: 16px 0 0; }
+.carte-lien { color: var(--encre); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+
+/* Le parcours : un trait, un numéro, un texte */
+.parcours { gap: 32px 24px; }
+.parcours li { background: transparent; border: 0; border-top: 1px solid var(--trait); border-radius: 0; padding: 18px 0 0; }
+.parcours li::before { content: counter(etape, decimal-leading-zero); display: block; width: auto; height: auto; background: none; color: var(--doux); font-size: .8rem; letter-spacing: .14em; margin-bottom: 14px; }
+
+/* Les questions : une liste à traits fins */
+.questions { gap: 0 32px; border-bottom: 1px solid var(--ligne); }
+.questions a { background: transparent; border: 0; border-top: 1px solid var(--ligne); border-radius: 0; padding: 18px 0; }
+.questions a:hover { color: var(--encre); text-decoration: underline; text-underline-offset: 4px; }
+.questions a span[aria-hidden] { color: var(--encre); }
+
+/* Posts, lieux, blocs de côté */
+.post::before { height: 3px; background: var(--encre); }
+.post-format { color: var(--doux); }
+.post-lien { color: var(--encre); }
+.lieu { background: transparent; border: 0; border-top: 1px solid var(--trait); border-radius: 0; padding: 20px 0 0; }
+.cote-bloc { background: transparent; border: 0; border-top: 1px solid var(--trait); border-radius: 0; padding: 18px 0 0; }
+.cote-bloc h2 { font-size: .74rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--doux); }
+.en-bref { border-color: var(--trait); }
+.encadre { background: #F4F4F4; border-left-width: 3px; border-left-color: var(--encre); }
+.reponse-courte { border-width: 1px; border-color: var(--encre); }
+.reponse-courte .surtitre { color: var(--doux); }
+.tableau thead th { background: #F4F4F4; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; }
+.frise li::before { border-radius: 0; border-color: var(--encre); width: 10px; height: 10px; left: -6px; }
+.prose li::marker { color: var(--encre); }
+a { color: var(--encre); }
+.pied { background: #111111; }
